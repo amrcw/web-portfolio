@@ -6,13 +6,12 @@
    <table class="table">
     <thead>
       <tr>
+        <th>Photo</th>
         <th>Id</th>
         <th>Owner</th>
+        <th>Category</th>
         <th>Title</th>
         <th>Body</th>
-        <th>Category</th>
-        <th>User ID</th>
-        <th>Photo</th>
         <th>Created At</th>
         <th>Updated On</th>
       </tr>
@@ -21,10 +20,10 @@
    @if($posts)
    @foreach($posts as $post)
       <tr>
+         <td><img height="50px" src="{{ $post->photo ? $post->photo->file : 'http://placehold.it/50*50'}}" alt=""></td>
         <td>{{ $post->id}}</td>
         <td>{{ $post->user->name}}</td>
-        <td>{{ $post->category_id}}</td>
-        <td>{{ $post->photo_id}}</td>
+        <td>{{ $post->category ? $post->category->name : 'Uncategorized'}}</td>
         <td>{{ $post->title}}</td>
         <td>{{ $post->body}}</td>
         <td>{{ $post->created_at->diffForHumans()}}</td>
