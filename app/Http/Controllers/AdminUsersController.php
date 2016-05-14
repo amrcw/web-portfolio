@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 use App\User;
 use App\Role;
@@ -96,6 +97,7 @@ class AdminUsersController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
+     *This is returning a new user (a duplicate and not updating properly. It worked before. REview 210 and 211)
      */
     public function update(UsersEditRequest $request, $id)
     {
@@ -118,34 +120,6 @@ class AdminUsersController extends Controller
       return redirect('/admin/users');
     }
 
-  //   public function update(UsersEditRequest $request, $id)
-  // {
-  //    if(trim($request->password) == '') {
-  //
-  //        $input = $request->except('password');
-  //    } else {
-  //
-  //        $input = $request->all();
-  //
-  //        $input['password'] = bcrypt($request->password);
-  //    }
-  //
-  //    if($file = $request->file('photo_id')) {
-  //
-  //        $name = time() . $file->getClientOriginalName();
-  //
-  //        $file->move('images', $name);
-  //
-  //        $photo = Photo::create(['file'=> $name]);
-  //
-  //        $input['photo_id'] = $photo->id;
-  //    }
-  //
-  //    User::create($input);
-  //
-  //    return redirect('/admin/users');
-  // }
-
     /**
      * Remove the specified resource from storage.
      *
@@ -154,6 +128,14 @@ class AdminUsersController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = User::findOrFail($id);
+
+        unlink(public_path() . $user->photo->file);
+
+        $user->delete();
+
+        Session::flash('delete_user', 'The user has been deleted');
+
+        return redirect('/admin/users');
     }
 }
