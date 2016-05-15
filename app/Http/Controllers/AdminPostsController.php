@@ -130,7 +130,7 @@ class AdminPostsController extends Controller
       unlink(public_path() . $post->photo->file);
 
       $post->delete();
-      
+
       return redirect('/admin/posts');
     }
 }
