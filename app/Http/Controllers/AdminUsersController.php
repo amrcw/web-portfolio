@@ -11,6 +11,7 @@ use App\Photo;
 use App\Http\Requests;
 use App\Http\Requests\UserRequest;
 use App\Http\Requests\UsersEditRequest;
+use Symfony\Component\HttpFoundation\Session\SessionBagInterface;
 
 class AdminUsersController extends Controller
 {
@@ -46,8 +47,16 @@ class AdminUsersController extends Controller
      */
     public function store(UserRequest $request)
     {
+      if(trim($request->password)=='')
+      {
+         $input =$request->except('password');
+      } else {
+         $input = $request->all();
+         $input['password']=bcrypt($request->password);
+      }
 
         $input = $request->all();
+
 
         if($file = $request->file('photo_id')) {
 
@@ -104,6 +113,15 @@ class AdminUsersController extends Controller
       $user = User::findOrFail($id);
 
       $input = $request->all();
+
+      if(trim($request->password)=='')
+        {
+            $input =$request->except('password');
+        }else{
+            $input = $request->all();
+            $input['password']=bcrypt($request->password);
+        }
+
 
       if($file = $request->file('photo_id')) {
 

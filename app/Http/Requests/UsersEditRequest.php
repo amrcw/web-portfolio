@@ -26,7 +26,6 @@ class UsersEditRequest extends Request
       return [
            'name'=>'required',
            'email'=>'required|email|unique:users,email',
-           'role_id'=>'required',
            'is_active'=>'required'
       ];
     }
